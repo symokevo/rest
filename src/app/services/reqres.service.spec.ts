@@ -1,16 +1,23 @@
-import { TestBed } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { User } from '../user';
 
-import { ReqresService } from './reqres.service';
+@Injectable({
+  providedIn: 'root'
+})
+export class ReqresService {
+  private url = 'api/users';
 
-describe('ReqresService', () => {
-  let service: ReqresService;
+  constructor( private http: HttpClient ) { }
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ReqresService);
-  });
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.url);
+  }
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+  getUser( id: number ): Observable<User> {
+    const url = `${this.url}/${id}`;
+
+    return this.http.get<User>(url);
+  }
+}
